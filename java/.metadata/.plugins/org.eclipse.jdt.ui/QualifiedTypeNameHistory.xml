@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="com.krakedev.inventarios.excepciones.KrakeDevException"/>
+    <fullyQualifiedTypeName name="com.krakedev.invventarios.bdd.ProveedoresBDD"/>
+    <fullyQualifiedTypeName name="javax.ws.rs.Produces"/>
+    <fullyQualifiedTypeName name="javax.ws.rs.core.MediaType"/>
+</qualifiedTypeNameHistroy>
