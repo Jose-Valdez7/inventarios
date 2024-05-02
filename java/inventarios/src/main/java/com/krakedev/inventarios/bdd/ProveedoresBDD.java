@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.krakedev.inventarios.entidades.Proveedor;
+import com.krakedev.inventarios.entidades.TipoDocumentos;
 import com.krakedev.inventarios.excepciones.KrakeDevException;
 import com.krakedev.inventarios.utils.ConexionBDD;
 
@@ -46,4 +47,33 @@ public class ProveedoresBDD {
 		
 		return proveedores;
 	}
+	
+		public ArrayList<TipoDocumentos> recuperarTodos() throws KrakeDevException{
+			ArrayList<TipoDocumentos> tipoDocumentos=new ArrayList<TipoDocumentos>();
+			Connection con=null;
+			PreparedStatement ps=null;
+			ResultSet rs=null;
+			TipoDocumentos tipos=null;
+			try {
+				con=ConexionBDD.obtenerConexion();
+				ps=con.prepareStatement("select * from tipo_documentos");
+				rs=ps.executeQuery();
+				
+				while(rs.next()) {
+					String codigo=rs.getString("codigo");
+					String descripcion=rs.getString("descripcion"); 
+					tipos=new TipoDocumentos(codigo,descripcion);
+					tipoDocumentos.add(tipos);
+				}
+				
+			} catch (KrakeDevException e) {
+				e.printStackTrace();
+				throw e;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new KrakeDevException("Error al consultar. Detalle:"+e.getMessage());
+			}
+			
+			return tipoDocumentos;
+		}
 }

@@ -30,4 +30,5 @@ public class ServiciosProveedores {
 			return Response.serverError().build();
 		}
 	}
+
 }
