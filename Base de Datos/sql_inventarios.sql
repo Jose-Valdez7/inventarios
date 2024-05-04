@@ -47,33 +47,32 @@ insert into categorias_unidad_medida(codigo_udm,nombre)
 values('P','Peso');
 
 create table unidades_medida(
-	codigo_udm char(1) not null,
 	nombre varchar(20) not null,
 	descripcion varchar(100) not null,
 	categoria_udm char(1) not null,
-	constraint unidades_medida_pk primary key (codigo_udm),
+	constraint unidades_medida_pk primary key (nombre),
 	constraint categorias_unidades_medida_fk foreign key (categoria_udm)
 	references categorias_unidad_medida(codigo_udm)
 );
-insert into unidades_medida(codigo_udm,nombre,descripcion,categoria_udm)
-values('1','ml','mililitros','V');
-insert into unidades_medida(codigo_udm,nombre,descripcion,categoria_udm)
-values('2','l','litros','V');
-insert into unidades_medida(codigo_udm,nombre,descripcion,categoria_udm)
-values('3','u','unidad','U');
-insert into unidades_medida(codigo_udm,nombre,descripcion,categoria_udm)
-values('4','d','docenas','U');
-insert into unidades_medida(codigo_udm,nombre,descripcion,categoria_udm)
-values('5','g','gramos','P');
-insert into unidades_medida(codigo_udm,nombre,descripcion,categoria_udm)
-values('6','kg','kilogramos','P');
-insert into unidades_medida(codigo_udm,nombre,descripcion,categoria_udm)
-values('7','lb','libras','P');
+insert into unidades_medida(nombre,descripcion,categoria_udm)
+values('ml','mililitros','V');
+insert into unidades_medida(nombre,descripcion,categoria_udm)
+values('l','litros','V');
+insert into unidades_medida(nombre,descripcion,categoria_udm)
+values('u','unidad','U');
+insert into unidades_medida(nombre,descripcion,categoria_udm)
+values('d','docenas','U');
+insert into unidades_medida(nombre,descripcion,categoria_udm)
+values('g','gramos','P');
+insert into unidades_medida(nombre,descripcion,categoria_udm)
+values('kg','kilogramos','P');
+insert into unidades_medida(nombre,descripcion,categoria_udm)
+values('lb','libras','P');
 
 create table productos(
 	codigo serial not null,
 	nombre varchar(100) not null,
-	UDM char(1) not null,
+	UDM char(10) not null,
 	precio_de_venta money not null,
 	tiene_IVA boolean not null,
 	coste money not null,
@@ -81,18 +80,18 @@ create table productos(
 	stock int not null,
 	constraint productos_pk primary key(codigo),
 	constraint unidades_medida_fk foreign key(UDM)
-	references unidades_medida(codigo_udm),
+	references unidades_medida(nombre),
 	constraint categorias_fk foreign key(categoria)
 	references categorias(codigo_cat)
 );
 insert into productos(nombre,UDM,precio_de_venta,tiene_IVA,coste,categoria,stock)
-values('Coca cola pequena','3',0.5804,'true',0.3729,7,105);
+values('Coca cola pequena','u',0.5804,'true',0.3729,7,105);
 insert into productos(nombre,UDM,precio_de_venta,tiene_IVA,coste,categoria,stock)
-values('Salsa de tomate','6',0.95,'true',0.8736,7,0);
+values('Salsa de tomate','kg',0.95,'true',0.8736,7,0);
 insert into productos(nombre,UDM,precio_de_venta,tiene_IVA,coste,categoria,stock)
-values('Mostaza','6',0.95,'true',0.89,7,0);
+values('Mostaza','kg',0.95,'true',0.89,7,0);
 insert into productos(nombre,UDM,precio_de_venta,tiene_IVA,coste,categoria,stock)
-values('Fuze Tea','3',0.8,'true',0.7,3,49);
+values('Fuze Tea','u',0.8,'true',0.7,3,49);
 
 create table tipo_documentos(
 	codigo char(1) not null,
