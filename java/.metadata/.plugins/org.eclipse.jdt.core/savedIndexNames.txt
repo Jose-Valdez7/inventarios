@@ -19,8 +19,8 @@ INDEX VERSION 1.134+C:\Users\Dell\Desktop\Programacion_Jose\Modulo 3\inventarios
 1531583941.index
 3065183002.index
 1948493576.index
-1919096803.index
 1871413474.index
+1919096803.index
 1830123925.index
 4043618428.index
 3462929978.index
