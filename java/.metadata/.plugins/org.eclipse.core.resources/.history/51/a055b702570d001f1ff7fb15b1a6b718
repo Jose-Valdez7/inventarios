@@ -112,10 +112,6 @@ public class PedidosBDD {
 				
 				psDet.executeUpdate();
 			}
-			
-			for(int i=0;i<detallesPedido.size();i++) {
-				det=detallesPedido.get(i);
-				
 			psHis=con.prepareStatement("insert into historial_stock (fecha, referencia, producto, cantidad) "
 					+ "values (?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
 			psHis.setTimestamp(1, fechaHoraActual);
@@ -131,7 +127,7 @@ public class PedidosBDD {
 			if(rsClave.next()) {
 				codigoCabecera=rsClave.getInt(1);
 			}
-			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new KrakeDevException("Error al actualizar el pedido. Detalle:"+e.getMessage());
