@@ -127,7 +127,7 @@ public class PedidosBDD {
 			
 			ResultSet rsClave=null;
 			int codigoCabecera=0;
-			rsClave=ps.getGeneratedKeys();
+			rsClave=psHis.getGeneratedKeys();
 			if(rsClave.next()) {
 				codigoCabecera=rsClave.getInt(1);
 			}
