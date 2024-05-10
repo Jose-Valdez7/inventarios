@@ -1,0 +1,51 @@
+package com.krakedev.inventarios.bdd;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import com.krakedev.inventarios.entidades.Categorias;
+import com.krakedev.inventarios.excepciones.KrakeDevException;
+import com.krakedev.inventarios.utils.ConexionBDD;
+
+public class CategoriasBDD {
+	public void insertar(Categorias categoria) throws KrakeDevException {
+		Connection con = null;
+		ResultSet rsClave=null;
+		int codigoCabecera=0;
+		try {
+			con=ConexionBDD.obtenerConexion();
+			PreparedStatement ps = con.prepareStatement("insert into categorias(nombre,categoria_padre) "
+					+ "values (?,?)",Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, categoria.getNombre());
+			
+			if(categoria.getCategoriaPadre()!=null) {
+			ps.setInt(2, categoria.getCategoriaPadre().getCogidoCat());	
+			}else {
+			ps.setString(2, null);	
+			}
+			
+			ps.executeUpdate();
+			
+			rsClave=ps.getGeneratedKeys();
+			if(rsClave.next()) {
+				codigoCabecera=rsClave.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new KrakeDevException("Error al insertar el producto. Detalle:"+e.getMessage());
+		} catch (KrakeDevException e) {
+			throw e;
+		}finally {
+			if(con!=null) {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			}
+		}
+	}
+}

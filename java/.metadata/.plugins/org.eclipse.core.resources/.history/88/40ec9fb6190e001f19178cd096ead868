@@ -1,0 +1,48 @@
+package com.krakedev.inventarios.bdd;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
+
+import com.krakedev.inventarios.entidades.Producto;
+import com.krakedev.inventarios.excepciones.KrakeDevException;
+import com.krakedev.inventarios.utils.ConexionBDD;
+
+public class ProductosBDD {
+	public void actualizar(Producto producto) throws KrakeDevException {
+		Connection con = null;
+		PreparedStatement ps=null;
+		PreparedStatement psDet=null;
+		PreparedStatement psHis=null;
+		
+		Date fechaActual=new Date();
+		Timestamp fechaHoraActual=new Timestamp(fechaActual.getTime());
+
+		try {
+			con=ConexionBDD.obtenerConexion();
+			ps=con.prepareStatement("update cabecera_pedido set estado=? where numero=?");
+			ps.setString(1, "R");
+			ps.setInt(2, producto.getCodigo());
+			
+			ps.executeUpdate();
+			
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new KrakeDevException("Error al actualizar el pedido. Detalle:"+e.getMessage());
+		} catch (KrakeDevException e) {
+			throw e;
+		}finally {
+			if(con!=null) {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			}
+		}
+	}
+}

@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.krakedev.inventarios.entidades.DetallePedido;
+import com.krakedev.inventarios.entidades.EstadoPedido;
 import com.krakedev.inventarios.entidades.Pedido;
+import com.krakedev.inventarios.entidades.Proveedor;
+import com.krakedev.inventarios.entidades.TipoDocumentos;
 import com.krakedev.inventarios.excepciones.KrakeDevException;
 import com.krakedev.inventarios.utils.ConexionBDD;
 
@@ -146,5 +149,69 @@ public class PedidosBDD {
 			}
 			}
 		}
+	}
+	
+	public ArrayList<Pedido> buscarPedido(String identificador) throws KrakeDevException{
+		ArrayList<Pedido> pedidos=new ArrayList<Pedido>();
+		Connection con=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		Pedido pedido=null;
+		try {
+			con=ConexionBDD.obtenerConexion();
+			ps=con.prepareStatement("Select cp.numero,cp.proveedor,cp.fecha,cp.estado,ep.descripcion, "
+					+ "prov.tipo_documento,prov.nombre,prov.telefono, prov.correo,prov.direccion "
+					+ "from cabecera_pedido cp, proveedores prov, estado_pedidos ep "
+					+ "where cp.proveedor=prov.identificador "
+					+ "and cp.estado=ep.codigo "
+					+ "and cp.proveedor = ?");
+			ps.setString(1, identificador);
+			rs=ps.executeQuery();
+			
+			while(rs.next()) {
+				int numero=rs.getInt("numero");
+				String proveedor=rs.getString("proveedor");
+				Date fecha=rs.getDate("fecha");
+				String estado=rs.getString("estado");
+				String descripcion=rs.getString("descripcion");
+				String tp=rs.getString("tipo_documento");
+				String nombre=rs.getString("nombre");
+				String telefono=rs.getString("telefono");
+				String direccion=rs.getString("direccion");
+				String correo=rs.getString("correo");
+				
+				TipoDocumentos td=new TipoDocumentos();
+				td.setCodigo(tp);
+				
+				Proveedor prov=new Proveedor();
+				prov.setIdentificador(proveedor);
+				prov.setTipoDocumento(td);
+				prov.setNombre(nombre);
+				prov.setTelefono(telefono);
+				prov.setCorreo(correo);
+				prov.setDireccion(direccion);
+				
+				EstadoPedido ep=new EstadoPedido();
+				ep.setCodigo(estado);
+				ep.setDescripcion(descripcion);
+				
+				pedido=new Pedido();
+				pedido.setCodigo(numero);
+				pedido.setProveedor(prov);
+				pedido.setFecha(fecha);
+				pedido.setEstado(ep);
+				
+				pedidos.add(pedido);
+			}
+			
+		} catch (KrakeDevException e) {
+			e.printStackTrace();
+			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new KrakeDevException("Error al consultar. Detalle:"+e.getMessage());
+		}
+		
+		return pedidos;
 	}
 }
