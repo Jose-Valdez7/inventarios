@@ -12,39 +12,39 @@ let personas = [
 ]
 
 //esNuevo indica si se esta creando una nueva persona o se esta modificando una existente
-let esNuevo=true;
+let esNuevo = true;
 //indiceSeleccionado la variable almacena el indice del arreglos del elemento selecccionado para la edicion
-let indiceSeleccionado= -1;
+let indiceSeleccionado = -1;
 
 export default function HomeScreen() {
   const [txtNombre, setTxtNombre] = useState("");
   const [txtApellido, setTxtApellido] = useState("");
   const [txtCedula, setTxtCedula] = useState("");
-  const [numElementos,setNumElementos]=useState(personas.length);
+  const [numElementos, setNumElementos] = useState(personas.length);
 
-  let ItemPersona = (props) => {
+  let ItemPersona = ({indice,persona}) => {
     return (<View style={styles.itemPersona}>
-      <View style={styles.itemIndice}><Text style={styles.textoPrincipal}> {props.indice}</Text></View>
-      <View style={styles.itemContenido}><Text style={styles.textoPrincipal}> {props.persona.nombre} {props.persona.apellido}</Text>
-        <Text style={styles.textoSecundario}> {props.persona.cedula}</Text></View>
+      <View style={styles.itemIndice}><Text style={styles.textoPrincipal}> {indice}</Text></View>
+      <View style={styles.itemContenido}><Text style={styles.textoPrincipal}> {persona.nombre} {persona.apellido}</Text>
+        <Text style={styles.textoSecundario}> {persona.cedula}</Text></View>
       <View style={styles.itemBotones}>
         <Button
           title=' E '
           color='green'
-          onPress={()=>{
-            setTxtCedula(props.persona.cedula);
-            setTxtNombre(props.persona.nombre);
-            setTxtApellido(props.persona.apellido);
-            esNuevo=false;
-            indiceSeleccionado=props.indice;
+          onPress={() => {
+            setTxtCedula(persona.cedula);
+            setTxtNombre(persona.nombre);
+            setTxtApellido(persona.apellido);
+            esNuevo = false;
+            indiceSeleccionado = indice;
           }}
         />
         <Button
           title=' X '
           color='red'
-          onPress={()=>{
-            indiceSeleccionado=props.indice;
-            personas.splice(indiceSeleccionado,1);
+          onPress={() => {
+            indiceSeleccionado = indice;
+            personas.splice(indiceSeleccionado, 1);
             //splice funcion para borrar cosas del arreglo
             //recibe 2 parametros desde que posicion se va a borrar
             // segundo cuantos voy a borrar
@@ -52,7 +52,7 @@ export default function HomeScreen() {
             setNumElementos(personas.length);
           }}
         />
-  
+
       </View>
     </View>);
   }
@@ -61,29 +61,29 @@ export default function HomeScreen() {
     setTxtNombre("");
     setTxtApellido("");
     setTxtCedula("");
-    esNuevo=true;
+    esNuevo = true;
   }
 
-  let existePersona=()=>{
-    for(let i=0;i<personas.length;i++){
-      if(personas[i].cedula==txtCedula){
+  let existePersona = () => {
+    for (let i = 0; i < personas.length; i++) {
+      if (personas[i].cedula == txtCedula) {
         return true;
       }
     }
     return false;
   }
-  
+
   let guardarPersona = () => {
-    if(esNuevo){
-    if(existePersona()){
-      Alert.alert("INFO","Ya existe una personas con la cedula "+txtCedula);
-    }else{
-      let persona = { nombre: txtNombre, apellido: txtApellido, cedula: txtCedula };
-    personas.push(persona);
-    }
-    }else{
-      personas[indiceSeleccionado].nombre=txtNombre;
-      personas[indiceSeleccionado].apellido=txtApellido;
+    if (esNuevo) {
+      if (existePersona()) {
+        Alert.alert("INFO", "Ya existe una personas con la cedula " + txtCedula);
+      } else {
+        let persona = { nombre: txtNombre, apellido: txtApellido, cedula: txtCedula };
+        personas.push(persona);
+      }
+    } else {
+      personas[indiceSeleccionado].nombre = txtNombre;
+      personas[indiceSeleccionado].apellido = txtApellido;
     }
     limpiar();
   }
@@ -121,7 +121,7 @@ export default function HomeScreen() {
           />
           <Button
             title='Nuevo'
-            onPress={()=>{
+            onPress={() => {
               limpiar();
             }}
           />
@@ -132,13 +132,11 @@ export default function HomeScreen() {
         <FlatList
           style={styles.lista}
           data={personas}
-          renderItem={(obj) => {
-            return <ItemPersona indice={obj.index} persona={obj.item}
+          renderItem={({index,item}) => {
+            return <ItemPersona indice={index} persona={item}
             />
           }}
-          keyExtractor={(item) => {
-            return item.cedula;
-          }}
+          keyExtractor={item => item.cedula}
         /></View>
       <View style={styles.areaPie}><Text> Autor: Jose Valdez</Text></View>
     </ThemedView>
@@ -160,7 +158,7 @@ const styles = StyleSheet.create({
     //backgroundColor: 'lightpink',
   },
   itemPersona: {
-    flexDirection:'row',
+    flexDirection: 'row',
     backgroundColor: "navy",
     marginBottom: 10,
     padding: 10,

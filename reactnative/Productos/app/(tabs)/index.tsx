@@ -1,4 +1,4 @@
-import { StyleSheet, Text, FlatList, View, Button, TextInput, Alert,ScrollView } from 'react-native';
+import { StyleSheet, Text, FlatList, View, Button, TextInput, Alert,ScrollView, TouchableHighlight, Modal } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useState,useEffect } from 'react';
@@ -21,6 +21,7 @@ export default function HomeScreen() {
   const [txtPrecioVenta, setTxtPrecioVenta] = useState("");
   const [txtId, setTxtId] = useState("");
   const [numElementos, setNumElementos] = useState(productos.length);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (txtPrecioCompra !== "") {
@@ -36,30 +37,56 @@ export default function HomeScreen() {
         <Text style={styles.textoSecundario}> {props.producto.categoria} </Text></View>
       <View style={styles.itemPrecio}><Text style={styles.textoPrincipal}> {props.producto.precioVenta} </Text></View>
       <View style={styles.itemBotones}>
-        <Button
-          title=' E '
-          color='green'
-          onPress={() => {
-            setTxtCategoria(props.producto.categoria);
-            setTxtNombre(props.producto.nombre);
-            setTxtPrecioCompra(props.producto.precioCompra);
-            setTxtPrecioVenta(props.producto.precioVenta);
-            esNuevo = false;
-            idSeleccionado = props.indice;
-          }}
-        />
+      
+      <TouchableHighlight 
+        onPress={() => {
+          setTxtCategoria(props.producto.categoria);
+          setTxtNombre(props.producto.nombre);
+          setTxtPrecioCompra(props.producto.precioCompra);
+          setTxtPrecioVenta(props.producto.precioVenta);
+          esNuevo = false;
+          idSeleccionado = props.indice;
+        }}>
+        <View style={styles.button}>
+          <Text>E</Text>
+        </View>
+      </TouchableHighlight>
+
         <Button
           title=' X '
           color='red'
           onPress={() => {
-            idSeleccionado = props.indice;
-            productos.splice(idSeleccionado, 1);
-            console.log("ARREGLO PRODUCTOS", productos);
-            setNumElementos(productos.length);
+            setModalVisible(true);
           }}
         />
-
       </View>
+      <Modal animationType='slide'
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={()=>{setModalVisible(false)}}>
+          <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>¿Está seguro que quiere eliminar?</Text>
+            <View style={styles.buttonContainer}>
+              <Button
+                title='Aceptar'
+                onPress={() => {
+                  idSeleccionado = props.indice;
+                  productos.splice(idSeleccionado, 1);
+                  setNumElementos(productos.length);
+                  setModalVisible(false);
+                }}
+              />
+              <Button
+                title='Cancelar'
+                onPress={() => {
+                  setModalVisible(false);
+                }}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>);
   }
 
@@ -261,5 +288,41 @@ const styles = StyleSheet.create({
   scrollView: {
     flexGrow: 1,
     //backgroundColor:"red"
+  },
+    button: {
+    alignItems: 'flex-start',
+    backgroundColor: 'green',
+    padding: 10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginTop: 20,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
