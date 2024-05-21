@@ -1,0 +1,11 @@
+@react-navigation/drawer
+react-native-reanimated
+react-native-safe-area-context
+react-native-gesture-handler
+
+babel.config.js
+
+import "react-native-gesture-handler"
+
+expo update
+expo start --clear
